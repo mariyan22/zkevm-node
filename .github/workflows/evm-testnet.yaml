@@ -1,10 +1,8 @@
 name: EVM Testnet Workflow
 
 on:
-  push:
-    branches:
-      - develop  # Adjust this to match your repository's main branch
-
+  workflow_dispatch:
+  
 jobs:
   deploy-testnet:
     runs-on: ubuntu-latest
@@ -23,14 +21,7 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-
-
-    - name: Set up Docker Environment
-      uses: actions/setup-docker@v2
-      with:
-        dockerfile: Dockerfile
         
-
     - name: Pull Docker Images
       run: |
         docker pull 104047360514.dkr.ecr.eu-central-1.amazonaws.com/go-ethereum:latest
@@ -40,8 +31,13 @@ jobs:
 
     - name: Set up Cloud Environment
       run: |
-        # Use Terraform to provision cloud resources (EC2 instances, networking, etc.)
-        # Use Ansible to configure the cloud environment and deploy your Ethereum nodes and zkEVM.
+        cd terraform
+        terraform init
+        terraform apply -auto-approve
+
+    - name: Configure and Deploy with Ansible
+      run: |
+        ansible-playbook ansible/provision.yml
 
     - name: Create EVM Testnet
       run: |

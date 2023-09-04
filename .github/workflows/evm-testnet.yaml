@@ -26,7 +26,6 @@ jobs:
       run: |
         docker pull 104047360514.dkr.ecr.eu-central-1.amazonaws.com/go-ethereum:latest
         docker pull 104047360514.dkr.ecr.eu-central-1.amazonaws.com/zkvem-node:latest
-        docker pull 104047360514.dkr.ecr.eu-central-1.amazonaws.com/zkevm-prover:latest
         docker pull 104047360514.dkr.ecr.eu-central-1.amazonaws.com/zkevm-contracts:latest
 
     - name: Set up Cloud Environment

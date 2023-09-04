@@ -20,8 +20,9 @@ resource "aws_instance" "evm_nodes" {
 }
 
 output "ec2_instance_ips" {
-  value = [for instance in aws_instance.evm_nodes : instance.private_ip]
+  value = [for instance in aws_instance.evm_nodes : instance.public_ip]
 }
+
 
 # Ensure your security group allows incoming SSH traffic (port 22).
 resource "aws_security_group" "ssh_access" {

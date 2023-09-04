@@ -34,6 +34,12 @@ jobs:
         terraform init
         terraform apply -auto-approve
 
+    - name: Generate Dynamic Inventory
+      working-directory: terraform
+      run: |
+        chmod +x dynamic-inventory-script.py
+        ./dynamic-inventory-script.py > dynamic_inventory.json
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -41,11 +47,6 @@ jobs:
 
     - name: Install Ansible
       run: pip install ansible
-
-    - name: Generate Dynamic Inventory
-      run: |
-        chmod +x terraform/dynamic-inventory-script.py
-        ./terraform/dynamic-inventory-script.py > dynamic_inventory.json
     
     - name: Run Ansible Playbook
       run: |

@@ -14,8 +14,7 @@ terraform_output = json.loads(output)
 inventory = {
     'evm_nodes': {
         'hosts': {
-            # Use host IPs as keys and provide an empty dictionary for each host
-            host_ip: {} for host_ip in terraform_output['ec2_instance_ips']['value']
+            f"evm-node-{count}": {} for count, _ in enumerate(terraform_output['ec2_instance_ips']['value'])
         },
         'vars': {}
     },

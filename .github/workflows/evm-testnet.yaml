@@ -39,6 +39,7 @@ jobs:
       run: |
         chmod +x dynamic-inventory-script.py
         ./dynamic-inventory-script.py > dynamic_inventory.json
+        cat dynamic_inventory.json
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -50,7 +51,7 @@ jobs:
     
     - name: Run Ansible Playbook
       run: |
-        ansible-playbook -i dynamic_inventory.json ansible/provision.yml
+        ansible-playbook -i terraform/dynamic_inventory.json ansible/provision.yml
 
     - name: Deploy zkEVM
       run: |

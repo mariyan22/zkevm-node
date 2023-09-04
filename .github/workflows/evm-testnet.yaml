@@ -42,18 +42,9 @@ jobs:
     - name: Install Ansible
       run: pip install ansible
 
-    - name: Download Ansible Dynamic Inventory Script
-      run: |
-        wget https://raw.githubusercontent.com/ansible/ansible/stable-2.9/contrib/inventory/ec2.py
-        chmod +x ec2.py
-
     - name: Run Ansible Playbook
       run: |
         ansible-playbook -i ec2.py ansible/provision.yml
-
-    - name: Create EVM Testnet
-      run: |
-        ansible-playbook ansible/create-evm-testnet.yml
 
     - name: Deploy zkEVM
       run: |

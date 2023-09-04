@@ -42,9 +42,13 @@ jobs:
     - name: Install Ansible
       run: pip install ansible
 
+    - name: Generate Dynamic Inventory
+      run: |
+        ./dynamic-inventory-script.py > dynamic_inventory.json
+    
     - name: Run Ansible Playbook
       run: |
-        ansible-playbook ansible/provision.yml
+        ansible-playbook -i dynamic_inventory.json ansible/provision.yml
 
     - name: Deploy zkEVM
       run: |

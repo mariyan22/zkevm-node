@@ -35,9 +35,22 @@ jobs:
         terraform init
         terraform apply -auto-approve
 
-    - name: Configure and Deploy with Ansible
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x  # Choose your preferred Python version
+
+    - name: Install Ansible
+      run: pip install ansible
+
+    - name: Download Ansible Dynamic Inventory Script
       run: |
-        ansible-playbook ansible/provision.yml
+        wget https://raw.githubusercontent.com/ansible/ansible/stable-2.9/contrib/inventory/ec2.py
+        chmod +x ec2.py
+
+    - name: Run Ansible Playbook
+      run: |
+        ansible-playbook -i ec2.py ansible/provision.yml
 
     - name: Create EVM Testnet
       run: |

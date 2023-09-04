@@ -8,7 +8,7 @@ resource "aws_instance" "evm_nodes" {
   count         = 3
   ami           = "ami-0766f68f0b06ab145"
   instance_type = "t2.micro"
-  key_name      = ec2-key-pair
+  key_name      = "ec2-key-pair"
 
   tags = {
     Name = "evm-node-${count.index}"

@@ -2,7 +2,7 @@
 
 ---
 - name: Provision EVM Nodes
-  hosts: evm_nodes
+  hosts: tag_evm_node-*
   become: yes
   gather_facts: yes
 
@@ -33,7 +33,6 @@
       loop:
         - 104047360514.dkr.ecr.eu-central-1.amazonaws.com/go-ethereum:latest
         - 104047360514.dkr.ecr.eu-central-1.amazonaws.com/zkvem-node:latest
-        - 104047360514.dkr.ecr.eu-central-1.amazonaws.com/zkevm-prover:latest
         - 104047360514.dkr.ecr.eu-central-1.amazonaws.com/zkevm-contracts:latest
   # Replace with your Docker image names
 
@@ -54,3 +53,54 @@
           --rpcport 8545
       async: 3600
       poll: 0
+
+    - name: Define ZKEVM Network
+      set_fact:
+        zkevm_net: "testnet"
+
+    - name: Define Installation Path
+      set_fact:
+        zkevm_dir: "/opt/ethereum/zkevm" 
+    - name: Define Config Directory
+      set_fact:
+        zkevm_config_dir: "/opt/ethereum/config"  # Update to your preferred config directory
+
+    - name: Download ZKEVM Artifacts
+      shell: |
+        curl -L https://github.com/0xPolygonHermez/zkevm-node/releases/latest/download/{{ zkevm_net }}.zip > {{ zkevm_net }}.zip && \
+        unzip -o {{ zkevm_net }}.zip -d {{ zkevm_dir }} && \
+        rm {{ zkevm_net }}.zip
+      args:
+        executable: /bin/bash
+      become_user: root  # Use root or the appropriate user depending on your setup
+
+    - name: Create Config Directory
+      file:
+        path: "{{ zkevm_config_dir }}"
+        state: directory
+
+    - name: Copy Env Parameters File
+      copy:
+        src: "{{ zkevm_dir }}/{{ zkevm_net }}/example.env"
+        dest: "{{ zkevm_config_dir }}/.env"
+        remote_src: yes
+      become_user: root  # Use root or the appropriate user depending on your setup
+
+    - name: Edit Env File
+      shell: |
+        nano {{ zkevm_config_dir }}/.env
+      become_user: root  # Use root or the appropriate user depending on your setup
+
+    - name: Start ZKEVM Node
+      shell: |
+        docker compose --env-file {{ zkevm_config_dir }}/.env -f {{ zkevm_dir }}/{{ zkevm_net }}/docker-compose.yml up -d
+      args:
+        executable: /bin/bash
+      become_user: root  # Use root or the appropriate user depending on your setup
+
+    - name: Verify Running Containers
+      shell: |
+        docker compose --env-file {{ zkevm_config_dir }}/.env -f {{ zkevm_dir }}/{{ zkevm_net }}/docker-compose.yml ps
+      args:
+        executable: /bin/bash
+      become_user: root  # Use root or the appropriate user depending on your setup

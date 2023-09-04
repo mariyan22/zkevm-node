@@ -54,7 +54,7 @@ jobs:
 
     - name: Create EVM Testnet
       run: |
-        # Start Ethereum nodes with the geth image and connect them to form a testnet.
+        ansible-playbook ansible/create-evm-testnet.yml
 
     - name: Deploy zkEVM
       run: |

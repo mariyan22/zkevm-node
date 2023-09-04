@@ -6,15 +6,28 @@ provider "aws" {
 
 resource "aws_instance" "evm_nodes" {
   count         = 3
-  ami           = "ami-0766f68f0b06ab145" 
+  ami           = "ami-0766f68f0b06ab145"
   instance_type = "t2.micro"
+  key_name      = ec2-key-pair
+
   tags = {
     Name = "evm-node-${count.index}"
-    Hostname = "evm-node-${count.index}"  # Assign custom hostnames based on count.index
+    Hostname = "evm-node-${count.index}"
   }
 }
 
-# Create an output variable to store the list of IP addresses
 output "ec2_instance_ips" {
   value = [for instance in aws_instance.evm_nodes : instance.private_ip]
+}
+
+# Ensure your security group allows incoming SSH traffic (port 22).
+resource "aws_security_group" "ssh_access" {
+  name_prefix = "ssh-access-"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }

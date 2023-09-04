@@ -19,9 +19,6 @@ inventory = {
         },
         'vars': {}
     },
-    '_meta': {
-        'hostvars': {}
-    }
 }
 
 print(json.dumps(inventory))

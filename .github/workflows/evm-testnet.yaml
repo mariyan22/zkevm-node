@@ -45,7 +45,7 @@ jobs:
     - name: Generate Dynamic Inventory
       run: |
         chmod +x dynamic-inventory-script.py
-        dynamic-inventory-script.py > dynamic_inventory.json
+        ./dynamic-inventory-script.py > dynamic_inventory.json
     
     - name: Run Ansible Playbook
       run: |

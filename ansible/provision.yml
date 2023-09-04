@@ -2,7 +2,7 @@
 
 ---
 - name: Provision EVM Nodes
-  hosts: tag_evm_node-*
+  hosts: evm_node-*
   become: yes
   gather_facts: yes
 

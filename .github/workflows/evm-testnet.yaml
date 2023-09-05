@@ -63,6 +63,8 @@ jobs:
     - name: Run Ansible Playbook
       env:
           ANSIBLE_CONFIG: ansible/ansible.cfg
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         ansible-playbook -i terraform/dynamic_inventory.json ansible/provision.yml
     - name: Deploy zkEVM

@@ -59,17 +59,12 @@ jobs:
 
     - name: Install Ansible
       run: pip install ansible
-    
+
     - name: Run Ansible Playbook
       env:
           ANSIBLE_CONFIG: ansible/ansible.cfg
-          EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
       run: |
-        touch /tmp/ec2-key.pem
-        echo "${{ secrets.EC2_PRIVATE_KEY }}" > /tmp/ec2-key.pem
-        cat /tmp/ec2-key.pem
-        chmod 600 /tmp/ec2-key.pem
-        ansible-playbook -i terraform/dynamic_inventory.json ansible/provision.yml --private-key /tmp/ec2-key.pem
+        ansible-playbook -i terraform/dynamic_inventory.json ansible/provision.yml
     - name: Deploy zkEVM
       run: |
         # Deploy your zkEVM implementation.

@@ -64,11 +64,12 @@ jobs:
       env:
           ANSIBLE_CONFIG: ansible/ansible.cfg
       run: |
-        touch /tmp/ec2-key.pem
-        chmod 400 /tmp/ec2-key.pem
-        echo "${{ secrets.EC2_PRIVATE_KEY }}" | ssh-keygen -p -m PEM -f /tmp/ec2-key.pem
-        cat /tmp/ec2-key.pem
-        ansible-playbook -i terraform/dynamic_inventory.json ansible/provision.yml --private-key /tmp/ec2-key.pem
+        touch /tmp/ec2-key
+        echo "${{ secrets.EC2_PRIVATE_KEY }}" > /tmp/ec2-key
+        chmod 400 /tmp/ec2-key
+        echo "${{ secrets.EC2_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
+        cat /tmp/ec2-key
+        ansible-playbook -i terraform/dynamic_inventory.json ansible/provision.yml --private-key /tmp/ec2-key
     - name: Deploy zkEVM
       run: |
         # Deploy your zkEVM implementation.

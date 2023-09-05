@@ -7,17 +7,12 @@
   gather_facts: yes
 
   tasks:
-    - name: Update apt cache
-      apt:
-        update_cache: yes
-      when: ansible_os_family == "Debian"
-
     - name: Install necessary packages
-      apt:
+      yum:
         name: "{{ item }}"
         state: present
       loop:
-        - docker.io
+        - docker
         - python3-pip  # Example: Install required packages
 
     - name: Start Docker service

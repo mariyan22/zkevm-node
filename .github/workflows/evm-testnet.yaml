@@ -68,7 +68,7 @@ jobs:
         touch /tmp/ec2-key
         echo "${{ secrets.EC2_PRIVATE_KEY }}" | tr -d '\r' > /tmp/ec2-key
         chmod 400 /tmp/ec2-key
-        ansible-playbook -i terraform/dynamic_inventory.json ansible/provision.yml --private-key /tmp/ec2-key -u ec2-user -vvv
+        ansible-playbook -i terraform/dynamic_inventory.json ansible/provision.yml --private-key /tmp/ec2-key -u ec2-user
     - name: Deploy zkEVM
       run: |
         # Deploy your zkEVM implementation.

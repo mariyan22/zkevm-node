@@ -115,10 +115,10 @@
         regexp: "{{ item.regexp }}"
         line: "{{ item.line }}"
       loop:
-        - { regexp: '^ZKEVM_NODE_ETHERMAN_URL=', line: 'ZKEVM_NODE_ETHERMAN_URL=http://localhost:8545' }
-        - { regexp: '^ZKEVM_NETWORK=', line: 'ZKEVM_NETWORK=testnet' }
-        - { regexp: '^ZKEVM_NODE_STATEDB_DATA_DIR=', line: 'ZKEVM_NODE_STATEDB_DATA_DIR=/opt/zkevm/state_db_data' }
-        - { regexp: '^ZKEVM_NODE_POOLDB_DATA_DIR=', line: 'ZKEVM_NODE_POOLDB_DATA_DIR=/opt/zkevm/pool_db_data' }
+        - { regexp: '^ZKEVM_NODE_ETHERMAN_URL\\s*=\\s*', line: 'ZKEVM_NODE_ETHERMAN_URL=http://localhost:8545' }
+        - { regexp: '^ZKEVM_NETWORK\\s*=\\s*', line: 'ZKEVM_NETWORK=testnet' }
+        - { regexp: '^ZKEVM_NODE_STATEDB_DATA_DIR\\s*=\\s*', line: 'ZKEVM_NODE_STATEDB_DATA_DIR=/opt/zkevm/state_db_data' }
+        - { regexp: '^ZKEVM_NODE_POOLDB_DATA_DIR\\s*=\\s*', line: 'ZKEVM_NODE_POOLDB_DATA_DIR=/opt/zkevm/pool_db_data' }
       become_user: root
 
     - name: Ensure Config Directory exists
@@ -146,27 +146,6 @@
       loop:
         - /opt/zkevm/state_db_data
         - /opt/zkevm/pool_db_data
-
-    - name: Set ZKEVM_NODE_ETHERMAN_URL in .env
-      lineinfile:
-        path: "{{ zkevm_config_dir }}/.env"
-        regexp: '^ZKEVM_NODE_ETHERMAN_URL='
-        line: 'ZKEVM_NODE_ETHERMAN_URL=http://localhost:8545'
-        create: yes
-
-    - name: Set ZKEVM_NODE_STATEDB_DATA_DIR in .env
-      lineinfile:
-        path: "{{ zkevm_config_dir }}/.env"
-        regexp: '^ZKEVM_NODE_STATEDB_DATA_DIR='
-        line: 'ZKEVM_NODE_STATEDB_DATA_DIR=/opt/zkevm/state_db_data'
-        create: yes
-
-    - name: Set ZKEVM_NODE_POOLDB_DATA_DIR in .env
-      lineinfile:
-        path: "{{ zkevm_config_dir }}/.env"
-        regexp: '^ZKEVM_NODE_POOLDB_DATA_DIR='
-        line: 'ZKEVM_NODE_POOLDB_DATA_DIR=/opt/zkevm/pool_db_data'
-        create: yes
 
     - name: Start ZKEVM Node
       shell: |

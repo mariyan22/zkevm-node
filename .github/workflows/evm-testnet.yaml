@@ -62,10 +62,10 @@ jobs:
 
     - name: Run Ansible Playbook
       env:
-          ANSIBLE_CONFIG: ansible/ansible.cfg
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: eu-central-1
+        ANSIBLE_CONFIG: ansible/ansible.cfg
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: eu-central-1
       run: |
         eval "$(ssh-agent -s)"
         touch /tmp/ec2-key

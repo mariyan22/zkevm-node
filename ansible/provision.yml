@@ -21,12 +21,13 @@
         state: started
         enabled: yes
 
-    - name: Login to Amazon ECR
-      shell: "$(aws ecr get-login --no-include-email --region eu-central-1)"
+    - name: Login to ECR
+      command: >
+        $(aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 104047360514.dkr.ecr.eu-central-1.amazonaws.com)
       environment:
         AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
         AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
-        AWS_DEFAULT_REGION: "eu-central-1"
+        AWS_DEFAULT_REGION: eu-central-1
         
     - name: Pull Docker images
       docker_image:

@@ -53,12 +53,12 @@
     - name: Configure Ethereum Nodes
       command: |
         docker run -d --name eth_node_{{ inventory_hostname }} \
-          -v /path/to/data:/data 104047360514.dkr.ecr.eu-central-1.amazonaws.com/go-ethereum:latest \
+          -v /var/ethereum-data:/data 104047360514.dkr.ecr.eu-central-1.amazonaws.com/go-ethereum:latest \
           --datadir /data \
           --networkid 1234 \
-          --rpc \
-          --rpcaddr "0.0.0.0" \
-          --rpcport 8545
+          --http \
+          --http.addr "0.0.0.0" \
+          --http.port 8545
       async: 3600
       poll: 0
 

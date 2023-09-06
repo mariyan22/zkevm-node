@@ -13,7 +13,7 @@ services:
         condition: service_healthy
       zkevm-sync:
         condition: service_started
-    image: zkevm-node
+    image: 104047360514.dkr.ecr.eu-central-1.amazonaws.com/zkevm-node:latest
     deploy:
       resources:
         limits:
@@ -38,7 +38,7 @@ services:
     depends_on:
       zkevm-state-db:
         condition: service_healthy
-    image: zkevm-node
+    image: 104047360514.dkr.ecr.eu-central-1.amazonaws.com/zkevm-node:latest
     ports:
       - 9092:9091 # needed if metrics enabled
     deploy:

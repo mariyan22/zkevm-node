@@ -21,6 +21,11 @@
         state: started
         enabled: yes
 
+    - name: Install Docker Compose
+      command:
+        cmd: pip3 install docker-compose
+        warn: no
+        
     - name: Login to Amazon ECR
       shell: |
         aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 104047360514.dkr.ecr.eu-central-1.amazonaws.com

@@ -7,7 +7,7 @@ provider "aws" {
 resource "aws_instance" "evm_nodes" {
   count         = 2
   ami           = "ami-0766f68f0b06ab145"
-  instance_type = "t2.medium"
+  instance_type = "t2.2xlarge"
   key_name      = "ec2-key-pair"
 
   # Associate the security group with the EC2 instances

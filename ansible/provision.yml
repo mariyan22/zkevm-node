@@ -105,22 +105,20 @@
     - name: Copy Env Parameters File
       copy:
         src: "{{ zkevm_dir }}/{{ zkevm_net }}/example.env"
-        dest: "{{ zkevm_config_dir }}/.env"
+        dest: "{{ zkevm_dir }}/{{ zkevm_net }}/.env"
         remote_src: yes
       become_user: root  # Use root or the appropriate user depending on your setup
 
-    - name: Set environment variable values in .env file
-      lineinfile:
-        path: "{{ zkevm_config_dir }}/.env"
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-      loop:
-        - { regexp: '^ZKEVM_NODE_ETHERMAN_URL\\s*=\\s*', line: 'ZKEVM_NODE_ETHERMAN_URL=http://localhost:8545' }
-        - { regexp: '^ZKEVM_NETWORK\\s*=\\s*', line: 'ZKEVM_NETWORK=testnet' }
-        - { regexp: '^ZKEVM_NODE_STATEDB_DATA_DIR\\s*=\\s*', line: 'ZKEVM_NODE_STATEDB_DATA_DIR=/opt/zkevm/state_db_data' }
-        - { regexp: '^ZKEVM_NODE_POOLDB_DATA_DIR\\s*=\\s*', line: 'ZKEVM_NODE_POOLDB_DATA_DIR=/opt/zkevm/pool_db_data' }
+    - name: Create or Update .env File in Desired Directory
+      copy:
+        content: |
+          ZKEVM_NETWORK="testnet"
+          ZKEVM_NODE_ETHERMAN_URL="http://localhost:8545"
+          ZKEVM_NODE_STATEDB_DATA_DIR="/opt/zkevm/state_db_data"
+          ZKEVM_NODE_POOLDB_DATA_DIR="/opt/zkevm/pool_db_data"
+        dest: "{{ zkevm_dir }}/{{ zkevm_net }}/.env"
       become_user: root
-
+  
     - name: Ensure Config Directory exists
       file:
         path: "{{ zkevm_config_dir }}"
@@ -149,10 +147,10 @@
 
     - name: Start ZKEVM Node
       shell: |
-        docker-compose -f {{ zkevm_dir }}/{{ zkevm_net }}/docker-compose.yml up -d
+        docker-compose up -d
       args:
         executable: /bin/bash
-        chdir: "{{ zkevm_config_dir }}"  # This sets the working directory to where your .env file is.
+        chdir: "{{ zkevm_dir }}/{{ zkevm_net }}"  # This sets the working directory to where your .env file is.
       become_user: root  # Use root or the appropriate user depending on your setup
 
     - name: Verify Running Containers

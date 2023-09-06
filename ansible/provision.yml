@@ -24,7 +24,6 @@
     - name: Install Docker Compose
       command:
         cmd: pip3 install docker-compose
-        warn: no
         
     - name: Login to Amazon ECR
       shell: |

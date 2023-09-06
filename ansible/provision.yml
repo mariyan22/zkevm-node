@@ -105,11 +105,6 @@
         remote_src: yes
       become_user: root  # Use root or the appropriate user depending on your setup
 
-    - name: Edit Env File
-      shell: |
-        nano {{ zkevm_config_dir }}/.env
-      become_user: root  # Use root or the appropriate user depending on your setup
-
     - name: Start ZKEVM Node
       shell: |
         docker compose --env-file {{ zkevm_config_dir }}/.env -f {{ zkevm_dir }}/{{ zkevm_net }}/docker-compose.yml up -d

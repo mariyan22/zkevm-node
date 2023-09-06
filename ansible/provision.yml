@@ -117,7 +117,13 @@
         owner: root
         group: root
       become: yes
-      
+
+    - name: Ensure postgres user exists
+      user:
+        name: postgres
+        system: yes
+        shell: /sbin/nologin
+    
     - name: Create directories for zkEVM data storage
       file:
         path: "{{ item }}"

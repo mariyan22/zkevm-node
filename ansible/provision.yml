@@ -64,10 +64,29 @@
 
     - name: Define Installation Path
       set_fact:
-        zkevm_dir: "/opt/ethereum/zkevm" 
+        zkevm_dir: "/opt/ethereum/zkevm"
+
     - name: Define Config Directory
       set_fact:
         zkevm_config_dir: "/opt/ethereum/config"  # Update to your preferred config directory
+
+    - name: Ensure Installation Directory exists
+      file:
+        path: "{{ zkevm_dir }}"
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
+      become: yes
+
+    - name: Ensure Config Directory exists
+      file:
+        path: "{{ zkevm_config_dir }}"
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
+      become: yes
 
     - name: Download ZKEVM Artifacts
       shell: |
@@ -78,10 +97,6 @@
         executable: /bin/bash
       become_user: root  # Use root or the appropriate user depending on your setup
 
-    - name: Create Config Directory
-      file:
-        path: "{{ zkevm_config_dir }}"
-        state: directory
 
     - name: Copy Env Parameters File
       copy:

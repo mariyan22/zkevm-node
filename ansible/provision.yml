@@ -109,6 +109,47 @@
         remote_src: yes
       become_user: root  # Use root or the appropriate user depending on your setup
 
+    - name: Ensure Config Directory exists
+      file:
+        path: "{{ zkevm_config_dir }}"
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
+      become: yes
+      
+    - name: Create directories for zkEVM data storage
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+        owner: postgres
+        group: postgres
+      loop:
+        - /opt/zkevm/state_db_data
+        - /opt/zkevm/pool_db_data
+
+    - name: Set ZKEVM_NODE_ETHERMAN_URL in .env
+      lineinfile:
+        path: "{{ zkevm_config_dir }}/.env"
+        regexp: '^ZKEVM_NODE_ETHERMAN_URL='
+        line: 'ZKEVM_NODE_ETHERMAN_URL=http://localhost:8545'
+        create: yes
+
+    - name: Set ZKEVM_NODE_STATEDB_DATA_DIR in .env
+      lineinfile:
+        path: "{{ zkevm_config_dir }}/.env"
+        regexp: '^ZKEVM_NODE_STATEDB_DATA_DIR='
+        line: 'ZKEVM_NODE_STATEDB_DATA_DIR=/opt/zkevm/state_db_data'
+        create: yes
+
+    - name: Set ZKEVM_NODE_POOLDB_DATA_DIR in .env
+      lineinfile:
+        path: "{{ zkevm_config_dir }}/.env"
+        regexp: '^ZKEVM_NODE_POOLDB_DATA_DIR='
+        line: 'ZKEVM_NODE_POOLDB_DATA_DIR=/opt/zkevm/pool_db_data'
+        create: yes
+
     - name: Start ZKEVM Node
       shell: |
         docker-compose -f {{ zkevm_dir }}/{{ zkevm_net }}/docker-compose.yml up -d

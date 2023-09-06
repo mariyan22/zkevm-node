@@ -109,6 +109,18 @@
         remote_src: yes
       become_user: root  # Use root or the appropriate user depending on your setup
 
+    - name: Set environment variable values in .env file
+      lineinfile:
+        path: "{{ zkevm_config_dir }}/.env"
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      loop:
+        - { regexp: '^ZKEVM_NODE_ETHERMAN_URL=', line: 'ZKEVM_NODE_ETHERMAN_URL=http://localhost:8545' }
+        - { regexp: '^ZKEVM_NETWORK=', line: 'ZKEVM_NETWORK=testnet' }
+        - { regexp: '^ZKEVM_NODE_STATEDB_DATA_DIR=', line: 'ZKEVM_NODE_STATEDB_DATA_DIR=/opt/zkevm/state_db_data' }
+        - { regexp: '^ZKEVM_NODE_POOLDB_DATA_DIR=', line: 'ZKEVM_NODE_POOLDB_DATA_DIR=/opt/zkevm/pool_db_data' }
+      become_user: root
+
     - name: Ensure Config Directory exists
       file:
         path: "{{ zkevm_config_dir }}"

@@ -107,14 +107,17 @@
 
     - name: Start ZKEVM Node
       shell: |
-        docker compose --env-file {{ zkevm_config_dir }}/.env -f {{ zkevm_dir }}/{{ zkevm_net }}/docker-compose.yml up -d
+        docker-compose -f {{ zkevm_dir }}/{{ zkevm_net }}/docker-compose.yml up -d
       args:
         executable: /bin/bash
+        chdir: "{{ zkevm_config_dir }}"  # This sets the working directory to where your .env file is.
       become_user: root  # Use root or the appropriate user depending on your setup
 
     - name: Verify Running Containers
       shell: |
-        docker compose --env-file {{ zkevm_config_dir }}/.env -f {{ zkevm_dir }}/{{ zkevm_net }}/docker-compose.yml ps
+        docker-compose -f {{ zkevm_dir }}/{{ zkevm_net }}/docker-compose.yml ps
       args:
         executable: /bin/bash
+        chdir: "{{ zkevm_config_dir }}"  # Again, set the working directory
       become_user: root  # Use root or the appropriate user depending on your setup
+

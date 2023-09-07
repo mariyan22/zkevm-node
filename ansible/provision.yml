@@ -44,24 +44,6 @@
       become: yes
       become_user: root
 
-    - name: Create Ethereum Data Directory
-      file:
-        path: /var/ethereum-data
-        state: directory
-      become: yes
-  
-    - name: Configure Ethereum Nodes
-      command: |
-        docker run -d --name eth_node_{{ inventory_hostname }} \
-          -v /var/ethereum-data:/data 104047360514.dkr.ecr.eu-central-1.amazonaws.com/go-ethereum:latest \
-          --datadir /data \
-          --networkid 1234 \
-          --http \
-          --http.addr "0.0.0.0" \
-          --http.port 8545
-      async: 3600
-      poll: 0
-
     - name: Define ZKEVM Network
       set_fact:
         zkevm_net: "testnet"
@@ -113,7 +95,7 @@
       copy:
         content: |
           ZKEVM_NETWORK="testnet"
-          ZKEVM_NODE_ETHERMAN_URL="http://localhost:8545"
+          ZKEVM_NODE_ETHERMAN_URL="http://geth:8545"
           ZKEVM_NODE_STATEDB_DATA_DIR="/opt/zkevm/state_db_data"
           ZKEVM_NODE_POOLDB_DATA_DIR="/opt/zkevm/pool_db_data"
         dest: "{{ zkevm_dir }}/{{ zkevm_net }}/.env"
